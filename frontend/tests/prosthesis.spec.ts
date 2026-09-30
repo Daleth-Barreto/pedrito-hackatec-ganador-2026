@@ -17,7 +17,9 @@ test("paciente nuevo: video, generación, vista previa, pedido y seguimiento", a
   await page.getByRole("button", { name: "Crear cuenta" }).click();
 
   await expect(page).toHaveURL(/\/prosthesis$/);
-  await expect(page.getByText("Cuenta creada.", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText("Cuenta creada.", { exact: false }),
+  ).toBeVisible();
 
   const next = page.locator(".demo-foot .button.primary");
   const skip = page.getByRole("button", { name: "Saltar al final" });
@@ -31,8 +33,6 @@ test("paciente nuevo: video, generación, vista previa, pedido y seguimiento", a
   await page.getByRole("tab", { name: /^2\./ }).click();
   await page.getByRole("tab", { name: /^3\./ }).click();
   await expect(next).toBeEnabled({ timeout: 60000 });
-  await next.click();
-  await skip.click();
   await next.click();
 
   const piece = page.getByRole("button", { name: "Siguiente pieza" });

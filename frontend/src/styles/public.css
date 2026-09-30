@@ -169,13 +169,15 @@
   border: 1px solid var(--border);
   box-shadow: 0 30px 60px -30px rgb(18 110 120 / 35%);
 }
-.landing-hero-visual img {
+.hero-mark {
   position: absolute;
-  inset: 8%;
-  width: 84%;
-  height: 84%;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+  inset: 22%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 20px 40px -24px rgb(18 110 120 / 45%);
 }
 .hero-chip {
   position: absolute;

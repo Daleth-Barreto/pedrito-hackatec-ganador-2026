@@ -596,7 +596,6 @@
     "Landing.subtitulo": "Graba tu extremidad residual con el teléfono, mira cómo se verá tu futura prótesis y recíbela en casa. Después, te acompañamos cada mes con seguimiento potenciado por IA y revisión de tu equipo de salud.",
     "Landing.cta_vista_previa": "Ver cómo se vería mi prótesis",
     "Landing.cta_crear_cuenta": "Crear cuenta de paciente",
-    "Landing.hero_alt": "Modelo 3D de una extremidad residual de mano reconstruida a partir de un video",
     "Landing.chip_escaneo": "Escaneo 3D listo",
     "Landing.chip_ajuste": "Ajuste a tu forma",
     "Landing.chip_envio": "Envío a domicilio",
@@ -751,7 +750,7 @@
     "status": "source",
     "reviewers": [],
     "reviewedAt": null,
-    "sourceRevision": "sha256:a7225cb12a21dca0801c5fb1d4d8dc2f055437252bdd814a72bac167fbb2033a",
+    "sourceRevision": "sha256:e8548a93569960bd41f81825f1f31440fc4cde18a9423398ea0de083b6dd87fe",
     "languageTag": "es-MX"
   }
 }

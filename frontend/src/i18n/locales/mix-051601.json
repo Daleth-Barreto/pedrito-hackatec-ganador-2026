@@ -3,7 +3,7 @@
     "status": "pending",
     "reviewers": [],
     "reviewedAt": null,
-    "sourceRevision": "sha256:a7225cb12a21dca0801c5fb1d4d8dc2f055437252bdd814a72bac167fbb2033a",
+    "sourceRevision": "sha256:e8548a93569960bd41f81825f1f31440fc4cde18a9423398ea0de083b6dd87fe",
     "languageTag": null,
     "variant": "Mixteco de Guerrero del noreste central",
     "communityConfirmed": false
@@ -605,7 +605,6 @@
     "Landing.subtitulo": null,
     "Landing.cta_vista_previa": null,
     "Landing.cta_crear_cuenta": null,
-    "Landing.hero_alt": null,
     "Landing.chip_escaneo": null,
     "Landing.chip_ajuste": null,
     "Landing.chip_envio": null,

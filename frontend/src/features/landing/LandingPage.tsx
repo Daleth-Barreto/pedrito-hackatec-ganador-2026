@@ -7,6 +7,7 @@ import {
   Check,
   Clock,
   Eye,
+  Hand,
   HeartHandshake,
   PiggyBank,
   Stethoscope,
@@ -24,8 +25,6 @@ import {
   SCAN_PRICE_PER_INCH,
   formatMXN,
 } from "../commerce/pricing";
-
-const HERO_IMAGE = `${import.meta.env.BASE_URL}demo/fotos_piel/foto_02.png`;
 
 const STEPS: { icon: typeof Video; title: MessageKey; text: MessageKey }[] = [
   { icon: Video, title: "Landing.paso1_titulo", text: "Landing.paso1_texto" },
@@ -116,7 +115,9 @@ export function LandingPage() {
             </ul>
           </div>
           <div className="landing-hero-visual">
-            <img src={HERO_IMAGE} alt={t("Landing.hero_alt")} />
+            <span className="hero-mark" aria-hidden="true">
+              <Hand size={120} strokeWidth={1.4} />
+            </span>
             <span className="hero-chip one">
               <Check size={15} aria-hidden="true" />
               {t("Landing.chip_escaneo")}
