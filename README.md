@@ -90,7 +90,7 @@ npm run dev
 
 Vite redirige `/api` al backend; no es necesario exponer credenciales ni URLs de almacenamiento al navegador. Si el entorno restringido de Windows impide que esbuild explore directorios al iniciar Vite, la vista previa compilada puede ejecutarse con `npm run build` y `npm run preview -- --port 5173 --configLoader runner`.
 
-`npm run preview` está reservado para comprobar localmente la compilación y solo escucha en `127.0.0.1`. GitHub Actions no lo ejecuta ni publica la aplicación; el workflow usa temporalmente el servidor de desarrollo para las pruebas automáticas.
+`npm run preview` está reservado para comprobar localmente la compilación y solo escucha en `127.0.0.1`. Las pruebas Playwright también se ejecutan únicamente en una computadora local mediante `npm run test:e2e`. GitHub Actions no inicia navegadores, servidores frontend ni publica la aplicación; solo valida el backend, las traducciones y la compilación del frontend.
 
 SQLite se admite **solo para pruebas aisladas o una vista previa técnica** (`DATABASE_URL=sqlite:///preview.db`). Esto no sustituye la ejecución con PostgreSQL y debe declararse al presentar resultados de pruebas.
 
