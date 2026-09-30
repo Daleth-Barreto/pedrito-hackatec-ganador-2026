@@ -11,6 +11,8 @@ export interface ProsthesisPackage {
   name: MessageKey;
   examples: MessageKey;
   featured?: boolean;
+  // Solo los paquetes disponibles se pueden elegir al ordenar.
+  available: boolean;
 }
 
 export const PACKAGES: ProsthesisPackage[] = [
@@ -19,6 +21,7 @@ export const PACKAGES: ProsthesisPackage[] = [
     price: 3000,
     name: "Pricing.pequena",
     examples: "Pricing.pequena_ejemplos",
+    available: false,
   },
   {
     id: "medium",
@@ -26,12 +29,14 @@ export const PACKAGES: ProsthesisPackage[] = [
     name: "Pricing.mediana",
     examples: "Pricing.mediana_ejemplos",
     featured: true,
+    available: true,
   },
   {
     id: "large",
     price: 12000,
     name: "Pricing.grande",
     examples: "Pricing.grande_ejemplos",
+    available: false,
   },
 ];
 

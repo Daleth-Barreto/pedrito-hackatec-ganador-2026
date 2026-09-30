@@ -989,3 +989,30 @@
 .journey-page .preview-case {
   top: 24px;
 }
+
+/* paquetes no disponibles */
+.price-badge.muted {
+  background: var(--surface-subtle);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.package-option.unavailable {
+  cursor: not-allowed;
+  background: var(--surface-subtle);
+  color: var(--muted);
+}
+.package-option.unavailable strong,
+.package-option.unavailable .package-option-price {
+  color: var(--muted);
+}
+.price-card.unavailable {
+  background: var(--surface-subtle);
+}
+.price-card.unavailable h3,
+.price-card.unavailable .price-amount strong {
+  color: var(--muted);
+}
+.price-card .price-badge.muted {
+  position: static;
+  margin-bottom: 12px;
+}

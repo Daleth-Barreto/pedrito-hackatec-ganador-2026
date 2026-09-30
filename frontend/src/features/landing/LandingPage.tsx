@@ -207,11 +207,16 @@ export function LandingPage() {
             {PACKAGES.map((item) => (
               <article
                 key={item.id}
-                className={`price-card${item.featured ? " featured" : ""}`}
+                className={`price-card${item.featured ? " featured" : ""}${item.available ? "" : " unavailable"}`}
               >
                 {item.featured && (
                   <span className="price-badge">
                     {t("Pricing.recomendado")}
+                  </span>
+                )}
+                {!item.available && (
+                  <span className="price-badge muted">
+                    {t("Pricing.no_disponible")}
                   </span>
                 )}
                 <h3>{t(item.name)}</h3>

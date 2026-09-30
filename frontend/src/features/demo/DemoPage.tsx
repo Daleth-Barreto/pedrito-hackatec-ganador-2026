@@ -583,8 +583,8 @@ function ProcessWalkthrough({ onFinish }: { onFinish?: () => void }) {
 
 const LAST_STEP = ASSEMBLY_STEPS.length - 1;
 const INCLUDED_PARTS = ASSEMBLY_STEPS.slice(1, LAST_STEP);
-// El caso de ejemplo es una mano parcial: corresponde al paquete pequeno.
-const RECOMMENDED: PackageId = "small";
+// Por ahora solo el paquete mediano esta disponible para pacientes.
+const RECOMMENDED: PackageId = "medium";
 
 function FuturePreview({
   onOrder,

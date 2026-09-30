@@ -3,7 +3,7 @@
     "status": "machine",
     "reviewers": [],
     "reviewedAt": null,
-    "sourceRevision": "sha256:e8548a93569960bd41f81825f1f31440fc4cde18a9423398ea0de083b6dd87fe",
+    "sourceRevision": "sha256:9b9e9d5728ab64e4e224d9684fabe137dd327983bfebe4101b213555c33a91f8",
     "languageTag": "zap",
     "communityConfirmed": false,
     "provider": "Google Translate",
@@ -757,6 +757,7 @@
     "Journey.ver_mi_protesis": null,
     "Journey.volver_al_proceso": null,
     "Order.ir_a_mi_seguimiento": null,
-    "Order.primer_registro": null
+    "Order.primer_registro": null,
+    "Pricing.no_disponible": null
   }
 }

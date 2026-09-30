@@ -99,13 +99,14 @@ export function OrderView({
               {PACKAGES.map((item) => (
                 <label
                   key={item.id}
-                  className={`package-option${item.id === selected ? " on" : ""}`}
+                  className={`package-option${item.id === selected ? " on" : ""}${item.available ? "" : " unavailable"}`}
                 >
                   <input
                     type="radio"
                     name="package"
                     value={item.id}
                     checked={item.id === selected}
+                    disabled={!item.available}
                     onChange={() => setSelected(item.id)}
                   />
                   <span className="package-option-text">
@@ -118,6 +119,11 @@ export function OrderView({
                   {item.id === initial && (
                     <span className="price-badge soft">
                       {t("Preview.paquete_recomendado")}
+                    </span>
+                  )}
+                  {!item.available && (
+                    <span className="price-badge muted">
+                      {t("Pricing.no_disponible")}
                     </span>
                   )}
                 </label>
