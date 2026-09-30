@@ -8,6 +8,7 @@ import {
   Plus,
   LogOut,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { useAuth } from "../features/auth/AuthContext";
 import { Notice } from "../components/UI";
@@ -59,6 +60,10 @@ export function Layout() {
               <NavLink to="/history">
                 <History size={19} />
                 {t("Layout.mi_historial")}
+              </NavLink>
+              <NavLink to="/prosthesis">
+                <Sparkles size={19} />
+                {t("Layout.mi_protesis")}
               </NavLink>
               <NavLink to="/account">
                 {t("Layout.mi_cuenta_y_privacidad")}

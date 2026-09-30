@@ -34,9 +34,9 @@ export function LoginPage() {
   return (
     <main className="login-page">
       <section className="login-intro">
-        <div className="brand">
+        <Link to="/" className="brand" aria-label={t("Public.ir_al_inicio")}>
           <Brand prominent />
-        </div>
+        </Link>
         <div className="login-story">
           <span className="overline">
             {t("LoginPage.cerca_entre_cada_consulta")}

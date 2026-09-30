@@ -1,20 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   ArrowLeft,
   ArrowRight,
   Check,
+  ChevronDown,
+  ChevronUp,
   Film,
   Pause,
   Play,
   RotateCcw,
+  ShoppingBag,
   SkipForward,
   StepBack,
   StepForward,
   Upload,
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { useProgress } from "@react-three/drei";
+import { Notice } from "../../components/UI";
 import "./demo.css";
+import { BRAND_NAME } from "../../components/Brand";
+import { PublicFooter, PublicHeader } from "../../components/PublicSite";
+import { t, useLocale } from "../../i18n/runtime";
+import { formatMXN, packageById, type PackageId } from "../commerce/pricing";
+import { ConfirmationView, OrderView, type Order } from "./OrderFlow";
 import {
   ASSEMBLY_STEPS,
   FRAMES,
@@ -29,12 +38,7 @@ import {
   viewLabel,
   type StageId,
 } from "./demoContent";
-import {
-  AssemblyScene,
-  PlyModel,
-  Stage3D,
-  preloadAssembly,
-} from "./Viewer3D";
+import { AssemblyScene, PlyModel, Stage3D, preloadAssembly } from "./Viewer3D";
 
 type Done = (id: StageId) => void;
 
@@ -371,7 +375,10 @@ function AssemblyStage({ onDone }: { onDone: () => void }) {
                 i < shown ? "done" : i === shown ? "current" : "pending"
               }
             >
-              <span className="demo-swatch" style={{ background: step.color }} />
+              <span
+                className="demo-swatch"
+                style={{ background: step.color }}
+              />
               <span className="demo-part-name">{step.title}</span>
               {step.files.length > 0 && (
                 <small>{UI.pieceCount(step.files.length)}</small>
@@ -423,20 +430,14 @@ function AssemblyStage({ onDone }: { onDone: () => void }) {
   );
 }
 
-// ------------------------------------------------------------------ pagina
+// ------------------------------------------------------ proceso tecnico
 
-export default function DemoPage() {
+// Con `onFinish`, la ultima etapa lleva a la vista previa en lugar de reiniciar.
+function ProcessWalkthrough({ onFinish }: { onFinish?: () => void }) {
+  useLocale();
   const [stage, setStage] = useState(0);
   const [done, setDone] = useState<Partial<Record<StageId, boolean>>>({});
   const info = STAGES[stage];
-
-  useEffect(() => {
-    const previous = document.title;
-    document.title = UI.title;
-    return () => {
-      document.title = previous;
-    };
-  }, []);
 
   const markDone = useCallback<Done>(
     (id) => setDone((d) => (d[id] ? d : { ...d, [id]: true })),
@@ -488,96 +489,409 @@ export default function DemoPage() {
   }
 
   return (
-    <div className="demo-page">
-      <header className="demo-header">
-        <div>
-          <p className="eyebrow">{UI.eyebrow}</p>
-          <h1>{UI.title}</h1>
-          <p className="demo-sub">{UI.subtitle}</p>
-        </div>
-        <Link to="/" className="button secondary">
-          <ArrowLeft size={16} />
-          {UI.back}
-        </Link>
-      </header>
+    <div className="demo-layout">
+      <nav className="demo-nav" aria-label={UI.navLabel}>
+        <ol>
+          {STAGES.map((s, i) => (
+            <li key={s.id}>
+              <button
+                type="button"
+                disabled={i > furthest}
+                aria-current={i === stage ? "step" : undefined}
+                className={
+                  i === stage ? "current" : done[s.id] ? "done" : "pending"
+                }
+                onClick={() => setStage(i)}
+              >
+                <span className="demo-num">
+                  {done[s.id] && i !== stage ? <Check size={14} /> : i + 1}
+                </span>
+                {s.nav}
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
 
-      <div className="demo-layout">
-        <nav className="demo-nav" aria-label={UI.navLabel}>
-          <ol>
-            {STAGES.map((s, i) => (
-              <li key={s.id}>
-                <button
-                  type="button"
-                  disabled={i > furthest}
-                  aria-current={i === stage ? "step" : undefined}
-                  className={
-                    i === stage ? "current" : done[s.id] ? "done" : "pending"
-                  }
-                  onClick={() => setStage(i)}
-                >
-                  <span className="demo-num">
-                    {done[s.id] && i !== stage ? <Check size={14} /> : i + 1}
-                  </span>
-                  {s.nav}
-                </button>
-              </li>
-            ))}
-          </ol>
-        </nav>
-
-        <section className="panel demo-stage" key={info.id}>
-          <div className="demo-stage-head">
-            <p className="eyebrow">{UI.stageOf(stage + 1, STAGES.length)}</p>
-            <h2>{info.title}</h2>
-            <p>{info.summary}</p>
-            <div className="demo-points">
-              <strong>{UI.happening}</strong>
-              <ul>
-                {info.points.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            </div>
+      <section className="panel demo-stage" key={info.id}>
+        <div className="demo-stage-head">
+          <p className="eyebrow">{UI.stageOf(stage + 1, STAGES.length)}</p>
+          <h2>{info.title}</h2>
+          <p>{info.summary}</p>
+          <div className="demo-points">
+            <strong>{UI.happening}</strong>
+            <ul>
+              {info.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
           </div>
+        </div>
 
-          <div className="demo-content">{renderStage()}</div>
+        <div className="demo-content">{renderStage()}</div>
 
-          <div className="demo-foot">
+        <div className="demo-foot">
+          <button
+            type="button"
+            className="button secondary"
+            disabled={stage === 0}
+            onClick={() => setStage((s) => Math.max(0, s - 1))}
+          >
+            <ArrowLeft size={16} />
+            {UI.previous}
+          </button>
+          {isLast && onFinish ? (
+            <button
+              type="button"
+              className="button primary"
+              disabled={!canContinue}
+              onClick={onFinish}
+            >
+              {t("Journey.ver_mi_protesis")}
+              <ArrowRight size={16} />
+            </button>
+          ) : isLast ? (
             <button
               type="button"
               className="button secondary"
-              disabled={stage === 0}
-              onClick={() => setStage((s) => Math.max(0, s - 1))}
+              onClick={() => {
+                setStage(0);
+                setDone({});
+              }}
             >
-              <ArrowLeft size={16} />
-              {UI.previous}
+              <RotateCcw size={16} />
+              {UI.restartDemo}
             </button>
-            {isLast ? (
+          ) : (
+            <button
+              type="button"
+              className="button primary"
+              disabled={!canContinue}
+              onClick={() => setStage((s) => s + 1)}
+            >
+              {UI.next}
+              <ArrowRight size={16} />
+            </button>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ------------------------------------------------ vista previa del paciente
+
+const LAST_STEP = ASSEMBLY_STEPS.length - 1;
+const INCLUDED_PARTS = ASSEMBLY_STEPS.slice(1, LAST_STEP);
+// Por ahora solo el paquete mediano esta disponible para pacientes.
+const RECOMMENDED: PackageId = "medium";
+
+function FuturePreview({
+  onOrder,
+  showProcess = true,
+}: {
+  onOrder: () => void;
+  showProcess?: boolean;
+}) {
+  useLocale();
+  const [shown, setShown] = useState(LAST_STEP);
+  const [building, setBuilding] = useState(false);
+  const [process, setProcess] = useState(false);
+  const recommended = packageById(RECOMMENDED);
+
+  useEffect(() => {
+    if (!building) return;
+    if (shown >= LAST_STEP) {
+      setBuilding(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setShown((s) => s + 1), 850);
+    return () => window.clearTimeout(timer);
+  }, [building, shown]);
+
+  function show(withProsthesis: boolean) {
+    setBuilding(false);
+    setShown(withProsthesis ? LAST_STEP : 0);
+  }
+
+  return (
+    <>
+      <section className="preview-hero">
+        <p className="eyebrow">{t("Preview.eyebrow")}</p>
+        <h1>{t("Preview.titulo")}</h1>
+        <p className="landing-lead">{t("Preview.subtitulo")}</p>
+      </section>
+
+      <div className="preview-grid">
+        <section className="panel preview-stage">
+          <div className="preview-toolbar">
+            <div
+              className="segmented"
+              role="group"
+              aria-label={t("Preview.vista")}
+            >
               <button
                 type="button"
-                className="button secondary"
-                onClick={() => {
-                  setStage(0);
-                  setDone({});
-                }}
+                aria-pressed={shown === LAST_STEP && !building}
+                onClick={() => show(true)}
               >
-                <RotateCcw size={16} />
-                {UI.restartDemo}
+                {t("Preview.con_protesis")}
               </button>
-            ) : (
               <button
                 type="button"
-                className="button primary"
-                disabled={!canContinue}
-                onClick={() => setStage((s) => s + 1)}
+                aria-pressed={shown === 0 && !building}
+                onClick={() => show(false)}
               >
-                {UI.next}
-                <ArrowRight size={16} />
+                {t("Preview.solo_extremidad")}
               </button>
-            )}
+            </div>
+            <button
+              type="button"
+              className="button secondary"
+              disabled={building}
+              onClick={() => {
+                setShown(0);
+                setBuilding(true);
+              }}
+            >
+              <Play size={16} />
+              {building ? t("Preview.armando") : t("Preview.ver_como_se_arma")}
+            </button>
           </div>
+          <div className="demo-viewer preview-viewer">
+            <Stage3D autoRotate={!building}>
+              <AssemblyScene shown={shown} />
+            </Stage3D>
+            <span className="demo-hint">{t("Preview.arrastra")}</span>
+          </div>
+          <p className="preview-step" aria-live="polite">
+            <strong>
+              {shown === LAST_STEP
+                ? t("Preview.resultado_titulo")
+                : ASSEMBLY_STEPS[shown].title}
+            </strong>
+            {shown === LAST_STEP
+              ? t("Preview.resultado_texto")
+              : ASSEMBLY_STEPS[shown].detail}
+          </p>
         </section>
+
+        <aside className="panel preview-case">
+          <h2>{t("Preview.tu_caso")}</h2>
+          <dl className="case-facts">
+            <div>
+              <dt>{t("Preview.tipo")}</dt>
+              <dd>{t("Preview.tipo_valor")}</dd>
+            </div>
+            <div>
+              <dt>{t("Preview.extremidad")}</dt>
+              <dd>{t("Preview.extremidad_valor")}</dd>
+            </div>
+            <div>
+              <dt>{t("Preview.escaneo")}</dt>
+              <dd className="case-ok">
+                <Check size={15} aria-hidden="true" />
+                {t("Preview.escaneo_valor")}
+              </dd>
+            </div>
+            <div>
+              <dt>{t("Preview.tamano")}</dt>
+              <dd>
+                {t(recommended.name)} · {t(recommended.examples)}
+              </dd>
+            </div>
+          </dl>
+          <div className="case-price">
+            <span>{t("Preview.paquete_recomendado")}</span>
+            <strong>{formatMXN(recommended.price)}</strong>
+            <small>{t("Preview.incluye_mes_gratis")}</small>
+          </div>
+          <button
+            type="button"
+            className="button primary full large"
+            onClick={onOrder}
+          >
+            <ShoppingBag size={18} />
+            {t("Preview.ordenar")}
+          </button>
+          <small className="preview-disclaimer">
+            {t("Preview.simulacion")}
+          </small>
+        </aside>
       </div>
+
+      <section className="panel preview-parts">
+        <h2>{t("Preview.piezas_titulo")}</h2>
+        <ul>
+          {INCLUDED_PARTS.map((part) => (
+            <li key={part.title}>
+              <span
+                className="demo-swatch"
+                style={{ background: part.color }}
+              />
+              <span>
+                <strong>{part.title}</strong>
+                <small>{part.detail}</small>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {showProcess && (
+        <section className="preview-process">
+          <div className="preview-process-head">
+            <div>
+              <h2>{t("Preview.proceso_titulo")}</h2>
+              <p className="subtitle">{t("Preview.proceso_texto")}</p>
+            </div>
+            <button
+              type="button"
+              className="button secondary"
+              aria-expanded={process}
+              onClick={() => setProcess((open) => !open)}
+            >
+              {process ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              {process
+                ? t("Preview.ocultar_proceso")
+                : t("Preview.ver_proceso")}
+            </button>
+          </div>
+          {process && <ProcessWalkthrough />}
+        </section>
+      )}
+    </>
+  );
+}
+
+// ------------------------------------- recorrido del paciente dentro de la app
+
+type JourneyView = "process" | "preview" | "order" | "done";
+const JOURNEY_VIEWS: JourneyView[] = ["process", "preview", "order", "done"];
+
+// Paciente con sesion: sube su video, sigue la generacion hasta el STL, ve su
+// protesis, la ordena y decide si activa el seguimiento.
+export function ProsthesisJourney() {
+  useLocale();
+  const location = useLocation();
+  const welcome = Boolean(
+    (location.state as { welcome?: boolean } | null)?.welcome,
+  );
+  const [view, setView] = useState<JourneyView>("process");
+  const [order, setOrder] = useState<Order | null>(null);
+  const current = JOURNEY_VIEWS.indexOf(view);
+  const labels = [
+    t("Journey.paso_escaneo"),
+    t("Journey.paso_vista"),
+    t("Journey.paso_pedido"),
+    t("Journey.paso_seguimiento"),
+  ];
+
+  function go(next: JourneyView) {
+    setView(next);
+    window.scrollTo({ top: 0 });
+  }
+
+  return (
+    <div className="journey-page">
+      {welcome && view === "process" && (
+        <Notice kind="success">{t("Journey.bienvenida")}</Notice>
+      )}
+      <ol className="stepper journey-stepper" aria-label={t("Journey.pasos")}>
+        {labels.map((label, i) => (
+          <li
+            key={label}
+            className={
+              i === current ? "current" : i < current ? "complete" : ""
+            }
+            aria-current={i === current ? "step" : undefined}
+          >
+            <span>{i < current ? <Check size={17} /> : i + 1}</span>
+            {label}
+          </li>
+        ))}
+      </ol>
+
+      {view === "process" && (
+        <>
+          <div className="page-title journey-title">
+            <p className="eyebrow">{t("Journey.eyebrow")}</p>
+            <h1>{t("Journey.titulo")}</h1>
+            <p className="subtitle">{t("Journey.subtitulo")}</p>
+            <small>{t("Journey.simulacion")}</small>
+          </div>
+          <ProcessWalkthrough onFinish={() => go("preview")} />
+        </>
+      )}
+      {view === "preview" && (
+        <>
+          <button
+            type="button"
+            className="back-link"
+            onClick={() => go("process")}
+          >
+            <ArrowLeft size={16} />
+            {t("Journey.volver_al_proceso")}
+          </button>
+          <FuturePreview onOrder={() => go("order")} showProcess={false} />
+        </>
+      )}
+      {view === "order" && (
+        <OrderView
+          initial={RECOMMENDED}
+          showSteps={false}
+          onBack={() => go("preview")}
+          onConfirm={(placed) => {
+            setOrder(placed);
+            go("done");
+          }}
+        />
+      )}
+      {view === "done" && order && (
+        <ConfirmationView order={order} showSteps={false} inApp />
+      )}
+    </div>
+  );
+}
+
+// ------------------------------------------------------------------ pagina
+
+export default function DemoPage() {
+  useLocale();
+  const [view, setView] = useState<"preview" | "order" | "done">("preview");
+  const [order, setOrder] = useState<Order | null>(null);
+
+  useEffect(() => {
+    const previous = document.title;
+    document.title = `${BRAND_NAME} · ${t("Preview.titulo")}`;
+    return () => {
+      document.title = previous;
+    };
+  }, []);
+
+  function go(next: typeof view) {
+    setView(next);
+    window.scrollTo({ top: 0 });
+  }
+
+  return (
+    <div className="site">
+      <PublicHeader />
+      <main className="demo-page" id="main-content">
+        {view === "preview" && <FuturePreview onOrder={() => go("order")} />}
+        {view === "order" && (
+          <OrderView
+            initial={RECOMMENDED}
+            onBack={() => go("preview")}
+            onConfirm={(placed) => {
+              setOrder(placed);
+              go("done");
+            }}
+          />
+        )}
+        {view === "done" && order && <ConfirmationView order={order} />}
+      </main>
+      <PublicFooter />
     </div>
   );
 }

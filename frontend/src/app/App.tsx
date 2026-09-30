@@ -1,9 +1,9 @@
 import { BRAND_NAME } from "../components/Brand";
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { LanguageBar } from "../i18n/LanguageBar";
 import { installValidation } from "../i18n/validation";
 import { t, useLocale } from "../i18n/runtime";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "../features/auth/AuthContext";
 import { LoginPage } from "../features/auth/LoginPage";
 import { PatientHome } from "../features/patient/PatientHome";
@@ -16,6 +16,14 @@ import { AccountPage } from "../features/patient/AccountPage";
 import { PrivacyNotice } from "../features/patient/PrivacyNotice";
 import { RegisterPage } from "../features/auth/RegisterPage";
 import { Layout } from "./Layout";
+import { LandingPage } from "../features/landing/LandingPage";
+
+// El recorrido carga three.js solo cuando el paciente entra.
+const ProsthesisJourney = lazy(() =>
+  import("../features/demo/DemoPage").then((module) => ({
+    default: module.ProsthesisJourney,
+  })),
+);
 function Protected({ patient = false }: { patient?: boolean }) {
   useLocale();
   const { user } = useAuth();
@@ -26,7 +34,10 @@ function Protected({ patient = false }: { patient?: boolean }) {
 function AppScreens() {
   useLocale();
   const { user, loading, error, reload } = useAuth();
+  const { pathname } = useLocation();
   if (loading) return <Loading text={t("App.preparando_tu_espacio")} />;
+  // La landing es publica: se muestra aunque el servicio no responda.
+  if (error && pathname === "/") return <LandingPage />;
   if (error)
     return (
       <main className="service-error">
@@ -42,19 +53,30 @@ function AppScreens() {
       <Route path="/privacy" element={<PrivacyNotice />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
+      {!user && <Route index element={<LandingPage />} />}
       <Route element={<Protected />}>
         <Route element={<Layout />}>
-          <Route
-            index
-            element={
-              user?.role === "clinician" ? <DashboardPage /> : <PatientHome />
-            }
-          />
+          {user && (
+            <Route
+              index
+              element={
+                user.role === "clinician" ? <DashboardPage /> : <PatientHome />
+              }
+            />
+          )}
           <Route path="/records/:id" element={<RecordDetailPage />} />
           <Route element={<Protected patient />}>
             <Route path="/records/new" element={<NewRecordPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/history" element={<HistoryPage />} />
+            <Route
+              path="/prosthesis"
+              element={
+                <Suspense fallback={<Loading />}>
+                  <ProsthesisJourney />
+                </Suspense>
+              }
+            />
           </Route>
         </Route>
       </Route>

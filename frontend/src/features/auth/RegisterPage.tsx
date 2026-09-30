@@ -1,17 +1,19 @@
 import { Brand } from "../../components/Brand";
 import { t, useLocale } from "../../i18n/runtime";
 import { useState, type FormEvent } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { api, errorMessage } from "../../services/api";
 import { Notice } from "../../components/UI";
 import { useAuth } from "./AuthContext";
 export function RegisterPage() {
   useLocale();
-  const { user } = useAuth();
+  const { user, login } = useAuth();
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
-  if (user) return <Navigate to="/account" replace />;
+  // Al registrarse, el paciente entra directo al recorrido de su protesis.
+  if (user && !busy) return <Navigate to="/account" replace />;
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -30,10 +32,18 @@ export function RegisterPage() {
           password: data.get("password"),
         }),
       });
-      setDone(true);
     } catch (e) {
       setError(errorMessage(e));
-    } finally {
+      setBusy(false);
+      return;
+    }
+    try {
+      await login(String(data.get("email")), String(data.get("password")));
+      // `busy` sigue activo para que esta pantalla no redirija a /account.
+      navigate("/prosthesis", { replace: true, state: { welcome: true } });
+    } catch {
+      // Si el inicio automatico falla, la cuenta ya existe: se pide iniciar sesion.
+      setDone(true);
       setBusy(false);
     }
   }
