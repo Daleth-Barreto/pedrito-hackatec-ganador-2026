@@ -4,6 +4,7 @@ import {
   Plus,
   Camera,
   ClipboardList,
+  Sparkles,
   UserRoundCheck,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -81,6 +82,19 @@ export function PatientHome() {
             </div>
           </div>
         </div>
+      </section>
+      <section className="panel prosthesis-card">
+        <span className="audience-icon">
+          <Sparkles size={22} aria-hidden="true" />
+        </span>
+        <div>
+          <h2>{t("PatientHome.tu_protesis")}</h2>
+          <p>{t("PatientHome.tu_protesis_texto")}</p>
+        </div>
+        <Link className="button secondary" to="/demo">
+          {t("PatientHome.ver_vista_previa")}
+          <ArrowRight size={16} />
+        </Link>
       </section>
       <Notice>
         <strong>

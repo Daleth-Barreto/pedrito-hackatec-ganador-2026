@@ -7,6 +7,7 @@ import "./styles/global.css";
 import "./styles/readability.css";
 import "./styles/privacy.css";
 import "./styles/language.css";
+import "./styles/public.css";
 
 // Demo interactiva aislada: no usa sesion ni backend y carga three.js solo al entrar.
 const DemoPage = lazy(() => import("./features/demo/DemoPage"));

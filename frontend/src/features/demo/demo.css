@@ -1,8 +1,8 @@
 .demo-page {
-  min-height: 100vh;
-  background: var(--background);
+  max-width: 1240px;
+  margin: 0 auto;
   color: var(--ink);
-  padding: 32px clamp(16px, 4vw, 48px) 48px;
+  padding: 32px clamp(16px, 4vw, 48px) 64px;
 }
 .demo-header {
   display: flex;
@@ -27,8 +27,7 @@
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
   gap: 24px;
-  max-width: 1240px;
-  margin: 0 auto;
+  margin: 20px 0 0;
   align-items: start;
 }
 
