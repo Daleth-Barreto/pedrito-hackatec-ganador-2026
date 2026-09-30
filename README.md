@@ -2,7 +2,7 @@
 
 ## Inicio rápido para el equipo en Windows
 
-El repositorio incluye el modelo mediante Git LFS. Cada integrante necesita Git LFS, Python 3.12 y Node.js 22 o posterior. Después de clonar, abre PowerShell en la raíz y ejecuta:
+El repositorio incluye el modelo mediante Git LFS. El entorno verificado usa Python 3.12.14, Node.js 24.21.0, npm 11.9.0, PyTorch CPU 2.14.0 y torchvision 0.29.0. Los archivos `.python-version` y `.nvmrc` documentan los runtimes; `backend/requirements-lock.txt`, `backend/requirements-ml-lock.txt` y `frontend/package-lock.json` fijan todas las dependencias. Después de clonar, abre PowerShell en la raíz y ejecuta:
 
 ```powershell
 git lfs pull
