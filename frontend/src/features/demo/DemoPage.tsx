@@ -19,7 +19,6 @@ import {
   ASSEMBLY_STEPS,
   FRAMES,
   PLY_ITEMS,
-  SKIN,
   SPECKLE,
   STAGES,
   UI,
@@ -447,12 +446,11 @@ export default function DemoPage() {
   const doneFrames = useCallback(() => markDone("frames"), [markDone]);
   const doneSpeckle = useCallback(() => markDone("speckle"), [markDone]);
   const doneCloud = useCallback(() => markDone("cloud"), [markDone]);
-  const doneSkin = useCallback(() => markDone("skin"), [markDone]);
   const doneAssembly = useCallback(() => markDone("assembly"), [markDone]);
 
   useEffect(() => {
-    // las piezas del ensamble se descargan mientras se revisan las fotos
-    if (info.id === "skin") preloadAssembly();
+    // las piezas del ensamble se descargan mientras se explora la reconstruccion 3D
+    if (info.id === "cloud") preloadAssembly();
   }, [info.id]);
 
   const unlocked = STAGES.findIndex((s) => !done[s.id]);
@@ -484,15 +482,6 @@ export default function DemoPage() {
         );
       case "cloud":
         return <CloudStage onDone={doneCloud} />;
-      case "skin":
-        return (
-          <PhotoStage
-            urls={SKIN}
-            caption={viewLabel}
-            intervalMs={700}
-            onDone={doneSkin}
-          />
-        );
       case "assembly":
         return <AssemblyStage onDone={doneAssembly} />;
     }
