@@ -19,10 +19,6 @@ export const FRAMES = Array.from({ length: 50 }, (_, i) =>
 export const SPECKLE = Array.from({ length: 24 }, (_, i) =>
   asset(`fotos_speckle/foto_${pad(i)}.png`),
 );
-export const SKIN = Array.from({ length: 24 }, (_, i) =>
-  asset(`fotos_piel/foto_${pad(i)}.png`),
-);
-
 // Los renders usan 12 azimuts x 2 elevaciones (18 y 45 grados), en ese orden.
 export function viewLabel(i: number): string {
   const azimuth = (i % 12) * 30;
@@ -38,7 +34,6 @@ export type StageId =
   | "frames"
   | "speckle"
   | "cloud"
-  | "skin"
   | "assembly";
 
 export interface StageInfo {
@@ -92,17 +87,6 @@ export const STAGES: StageInfo[] = [
     points: [
       "Arrastra para rotar, rueda para acercar y botón derecho para desplazar.",
       "Son tres resultados seguidos: malla Poisson, nube de puntos densa y malla cerrada.",
-    ],
-  },
-  {
-    id: "skin",
-    nav: "Fotos de la mano",
-    title: "Vistas de la mano escaneada",
-    summary:
-      "Renders de la mano con textura de piel, generados desde el modelo 3D, para revisar el resultado desde distintos ángulos.",
-    points: [
-      "Son 12 azimuts por 2 elevaciones, mostradas una a una.",
-      "Sirven para documentar el escaneo; no se usan para reconstruir porque la piel lisa da muy pocos puntos reconocibles.",
     ],
   },
   {
