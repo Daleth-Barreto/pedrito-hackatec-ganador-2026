@@ -3,7 +3,7 @@
     "status": "machine",
     "reviewers": [],
     "reviewedAt": null,
-    "sourceRevision": "sha256:c75e9d5deaab08ace6fc0e7b046c2ef5c846b5b87f48973db36fe62d3617cdbe",
+    "sourceRevision": "sha256:a7225cb12a21dca0801c5fb1d4d8dc2f055437252bdd814a72bac167fbb2033a",
     "languageTag": "zap",
     "communityConfirmed": false,
     "provider": "Google Translate",
@@ -742,8 +742,22 @@
     "PatientHome.tu_protesis": null,
     "PatientHome.tu_protesis_texto": null,
     "PatientHome.ver_vista_previa": null,
-    "Layout.vista_previa_protesis": null,
     "Preview.resultado_titulo": null,
-    "Preview.resultado_texto": null
+    "Preview.resultado_texto": null,
+    "Layout.mi_protesis": null,
+    "Journey.eyebrow": null,
+    "Journey.titulo": null,
+    "Journey.subtitulo": null,
+    "Journey.simulacion": null,
+    "Journey.bienvenida": null,
+    "Journey.pasos": null,
+    "Journey.paso_escaneo": null,
+    "Journey.paso_vista": null,
+    "Journey.paso_pedido": null,
+    "Journey.paso_seguimiento": null,
+    "Journey.ver_mi_protesis": null,
+    "Journey.volver_al_proceso": null,
+    "Order.ir_a_mi_seguimiento": null,
+    "Order.primer_registro": null
   }
 }

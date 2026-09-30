@@ -29,7 +29,11 @@ test("cuenta, consentimiento, ARCO y cambio de contraseña", async ({
       page.getByRole("link", { name: "Mi cuenta y privacidad" }),
     ).toBeVisible();
   }
-  await login(password);
+  // El registro inicia sesión automáticamente y abre el recorrido de la prótesis.
+  await expect(page).toHaveURL(/\/prosthesis$/);
+  await expect(
+    page.getByRole("link", { name: "Mi cuenta y privacidad" }),
+  ).toBeVisible();
   await page.goto("/records/new");
   await expect(
     page.getByRole("heading", { name: "Consentimiento informado" }),

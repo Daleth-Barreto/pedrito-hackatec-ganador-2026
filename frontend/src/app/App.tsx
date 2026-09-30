@@ -1,5 +1,5 @@
 import { BRAND_NAME } from "../components/Brand";
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { LanguageBar } from "../i18n/LanguageBar";
 import { installValidation } from "../i18n/validation";
 import { t, useLocale } from "../i18n/runtime";
@@ -17,6 +17,13 @@ import { PrivacyNotice } from "../features/patient/PrivacyNotice";
 import { RegisterPage } from "../features/auth/RegisterPage";
 import { Layout } from "./Layout";
 import { LandingPage } from "../features/landing/LandingPage";
+
+// El recorrido carga three.js solo cuando el paciente entra.
+const ProsthesisJourney = lazy(() =>
+  import("../features/demo/DemoPage").then((module) => ({
+    default: module.ProsthesisJourney,
+  })),
+);
 function Protected({ patient = false }: { patient?: boolean }) {
   useLocale();
   const { user } = useAuth();
@@ -62,6 +69,14 @@ function AppScreens() {
             <Route path="/records/new" element={<NewRecordPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/history" element={<HistoryPage />} />
+            <Route
+              path="/prosthesis"
+              element={
+                <Suspense fallback={<Loading />}>
+                  <ProsthesisJourney />
+                </Suspense>
+              }
+            />
           </Route>
         </Route>
       </Route>

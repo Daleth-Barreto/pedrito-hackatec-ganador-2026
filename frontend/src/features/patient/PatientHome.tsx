@@ -91,7 +91,7 @@ export function PatientHome() {
           <h2>{t("PatientHome.tu_protesis")}</h2>
           <p>{t("PatientHome.tu_protesis_texto")}</p>
         </div>
-        <Link className="button secondary" to="/demo">
+        <Link className="button primary" to="/prosthesis">
           {t("PatientHome.ver_vista_previa")}
           <ArrowRight size={16} />
         </Link>

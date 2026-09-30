@@ -59,10 +59,12 @@ export function OrderView({
   initial,
   onBack,
   onConfirm,
+  showSteps = true,
 }: {
   initial: PackageId;
   onBack: () => void;
   onConfirm: (order: Order) => void;
+  showSteps?: boolean;
 }) {
   useLocale();
   const [selected, setSelected] = useState<PackageId>(initial);
@@ -84,7 +86,7 @@ export function OrderView({
         <ArrowLeft size={16} />
         {t("Order.volver")}
       </button>
-      <OrderSteps step={1} />
+      {showSteps && <OrderSteps step={1} />}
       <div className="page-title">
         <h1>{t("Order.titulo")}</h1>
         <p className="subtitle">{t("Order.subtitulo")}</p>
@@ -212,7 +214,15 @@ export function OrderView({
   );
 }
 
-export function ConfirmationView({ order }: { order: Order }) {
+export function ConfirmationView({
+  order,
+  showSteps = true,
+  inApp = false,
+}: {
+  order: Order;
+  showSteps?: boolean;
+  inApp?: boolean;
+}) {
   useLocale();
   const [followUp, setFollowUp] = useState<"ask" | "active" | "declined">(
     "ask",
@@ -239,7 +249,7 @@ export function ConfirmationView({ order }: { order: Order }) {
 
   return (
     <div className="order-view">
-      <OrderSteps step={2} />
+      {showSteps && <OrderSteps step={2} />}
       <section className="panel confirmation-hero">
         <CircleCheck size={44} aria-hidden="true" />
         <h1>{t("Order.confirmado_titulo")}</h1>
@@ -303,14 +313,25 @@ export function ConfirmationView({ order }: { order: Order }) {
         </div>
       </section>
 
-      <div className="button-group order-end">
-        <Link to="/register" className="button primary">
-          {t("Order.crear_cuenta")}
-        </Link>
-        <Link to="/" className="button secondary">
-          {t("Order.volver_inicio")}
-        </Link>
-      </div>
+      {inApp ? (
+        <div className="button-group order-end">
+          <Link to="/" className="button primary">
+            {t("Order.ir_a_mi_seguimiento")}
+          </Link>
+          <Link to="/records/new" className="button secondary">
+            {t("Order.primer_registro")}
+          </Link>
+        </div>
+      ) : (
+        <div className="button-group order-end">
+          <Link to="/register" className="button primary">
+            {t("Order.crear_cuenta")}
+          </Link>
+          <Link to="/" className="button secondary">
+            {t("Order.volver_inicio")}
+          </Link>
+        </div>
+      )}
       <small className="order-disclaimer">{t("Order.sin_cargos")}</small>
     </div>
   );

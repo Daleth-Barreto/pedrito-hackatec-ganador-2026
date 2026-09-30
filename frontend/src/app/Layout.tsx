@@ -61,9 +61,9 @@ export function Layout() {
                 <History size={19} />
                 {t("Layout.mi_historial")}
               </NavLink>
-              <NavLink to="/demo">
+              <NavLink to="/prosthesis">
                 <Sparkles size={19} />
-                {t("Layout.vista_previa_protesis")}
+                {t("Layout.mi_protesis")}
               </NavLink>
               <NavLink to="/account">
                 {t("Layout.mi_cuenta_y_privacidad")}

@@ -15,7 +15,9 @@ import {
   StepForward,
   Upload,
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { useProgress } from "@react-three/drei";
+import { Notice } from "../../components/UI";
 import "./demo.css";
 import { BRAND_NAME } from "../../components/Brand";
 import { PublicFooter, PublicHeader } from "../../components/PublicSite";
@@ -431,7 +433,9 @@ function AssemblyStage({ onDone }: { onDone: () => void }) {
 
 // ------------------------------------------------------ proceso tecnico
 
-function ProcessWalkthrough() {
+// Con `onFinish`, la ultima etapa lleva a la vista previa en lugar de reiniciar.
+function ProcessWalkthrough({ onFinish }: { onFinish?: () => void }) {
+  useLocale();
   const [stage, setStage] = useState(0);
   const [done, setDone] = useState<Partial<Record<StageId, boolean>>>({});
   const info = STAGES[stage];
@@ -547,7 +551,17 @@ function ProcessWalkthrough() {
             <ArrowLeft size={16} />
             {UI.previous}
           </button>
-          {isLast ? (
+          {isLast && onFinish ? (
+            <button
+              type="button"
+              className="button primary"
+              disabled={!canContinue}
+              onClick={onFinish}
+            >
+              {t("Journey.ver_mi_protesis")}
+              <ArrowRight size={16} />
+            </button>
+          ) : isLast ? (
             <button
               type="button"
               className="button secondary"
@@ -583,7 +597,13 @@ const INCLUDED_PARTS = ASSEMBLY_STEPS.slice(1, LAST_STEP);
 // El caso de ejemplo es una mano parcial: corresponde al paquete pequeno.
 const RECOMMENDED: PackageId = "small";
 
-function FuturePreview({ onOrder }: { onOrder: () => void }) {
+function FuturePreview({
+  onOrder,
+  showProcess = true,
+}: {
+  onOrder: () => void;
+  showProcess?: boolean;
+}) {
   useLocale();
   const [shown, setShown] = useState(LAST_STEP);
   const [building, setBuilding] = useState(false);
@@ -729,25 +749,119 @@ function FuturePreview({ onOrder }: { onOrder: () => void }) {
         </ul>
       </section>
 
-      <section className="preview-process">
-        <div className="preview-process-head">
-          <div>
-            <h2>{t("Preview.proceso_titulo")}</h2>
-            <p className="subtitle">{t("Preview.proceso_texto")}</p>
+      {showProcess && (
+        <section className="preview-process">
+          <div className="preview-process-head">
+            <div>
+              <h2>{t("Preview.proceso_titulo")}</h2>
+              <p className="subtitle">{t("Preview.proceso_texto")}</p>
+            </div>
+            <button
+              type="button"
+              className="button secondary"
+              aria-expanded={process}
+              onClick={() => setProcess((open) => !open)}
+            >
+              {process ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              {process
+                ? t("Preview.ocultar_proceso")
+                : t("Preview.ver_proceso")}
+            </button>
           </div>
+          {process && <ProcessWalkthrough />}
+        </section>
+      )}
+    </>
+  );
+}
+
+// ------------------------------------- recorrido del paciente dentro de la app
+
+type JourneyView = "process" | "preview" | "order" | "done";
+const JOURNEY_VIEWS: JourneyView[] = ["process", "preview", "order", "done"];
+
+// Paciente con sesion: sube su video, sigue la generacion hasta el STL, ve su
+// protesis, la ordena y decide si activa el seguimiento.
+export function ProsthesisJourney() {
+  useLocale();
+  const location = useLocation();
+  const welcome = Boolean(
+    (location.state as { welcome?: boolean } | null)?.welcome,
+  );
+  const [view, setView] = useState<JourneyView>("process");
+  const [order, setOrder] = useState<Order | null>(null);
+  const current = JOURNEY_VIEWS.indexOf(view);
+  const labels = [
+    t("Journey.paso_escaneo"),
+    t("Journey.paso_vista"),
+    t("Journey.paso_pedido"),
+    t("Journey.paso_seguimiento"),
+  ];
+
+  function go(next: JourneyView) {
+    setView(next);
+    window.scrollTo({ top: 0 });
+  }
+
+  return (
+    <div className="journey-page">
+      {welcome && view === "process" && (
+        <Notice kind="success">{t("Journey.bienvenida")}</Notice>
+      )}
+      <ol className="stepper journey-stepper" aria-label={t("Journey.pasos")}>
+        {labels.map((label, i) => (
+          <li
+            key={label}
+            className={
+              i === current ? "current" : i < current ? "complete" : ""
+            }
+            aria-current={i === current ? "step" : undefined}
+          >
+            <span>{i < current ? <Check size={17} /> : i + 1}</span>
+            {label}
+          </li>
+        ))}
+      </ol>
+
+      {view === "process" && (
+        <>
+          <div className="page-title journey-title">
+            <p className="eyebrow">{t("Journey.eyebrow")}</p>
+            <h1>{t("Journey.titulo")}</h1>
+            <p className="subtitle">{t("Journey.subtitulo")}</p>
+            <small>{t("Journey.simulacion")}</small>
+          </div>
+          <ProcessWalkthrough onFinish={() => go("preview")} />
+        </>
+      )}
+      {view === "preview" && (
+        <>
           <button
             type="button"
-            className="button secondary"
-            aria-expanded={process}
-            onClick={() => setProcess((open) => !open)}
+            className="back-link"
+            onClick={() => go("process")}
           >
-            {process ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            {process ? t("Preview.ocultar_proceso") : t("Preview.ver_proceso")}
+            <ArrowLeft size={16} />
+            {t("Journey.volver_al_proceso")}
           </button>
-        </div>
-        {process && <ProcessWalkthrough />}
-      </section>
-    </>
+          <FuturePreview onOrder={() => go("order")} showProcess={false} />
+        </>
+      )}
+      {view === "order" && (
+        <OrderView
+          initial={RECOMMENDED}
+          showSteps={false}
+          onBack={() => go("preview")}
+          onConfirm={(placed) => {
+            setOrder(placed);
+            go("done");
+          }}
+        />
+      )}
+      {view === "done" && order && (
+        <ConfirmationView order={order} showSteps={false} inApp />
+      )}
+    </div>
   );
 }
 

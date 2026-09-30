@@ -727,17 +727,31 @@
     "Order.crear_cuenta": "Crear cuenta para registrar mi seguimiento",
     "Order.volver_inicio": "Volver al inicio",
     "PatientHome.tu_protesis": "Tu futura prótesis",
-    "PatientHome.tu_protesis_texto": "Mira cómo se verá sobre tu extremidad y conoce los paquetes disponibles.",
-    "PatientHome.ver_vista_previa": "Ver vista previa",
-    "Layout.vista_previa_protesis": "Vista previa de prótesis",
+    "PatientHome.tu_protesis_texto": "Sube el video de tu extremidad, sigue cada etapa de la generación y mira cómo se verá tu prótesis antes de ordenarla.",
+    "PatientHome.ver_vista_previa": "Crear mi prótesis",
     "Preview.resultado_titulo": "Tu prótesis completa",
-    "Preview.resultado_texto": "Socket blando, cuatro dedos articulados y conectores, ajustados a la forma de tu extremidad residual."
+    "Preview.resultado_texto": "Socket blando, cuatro dedos articulados y conectores, ajustados a la forma de tu extremidad residual.",
+    "Layout.mi_protesis": "Mi prótesis",
+    "Journey.eyebrow": "MI PRÓTESIS",
+    "Journey.titulo": "Crea tu prótesis a partir de un video",
+    "Journey.subtitulo": "Sube un video de tu extremidad residual y acompaña cada etapa: de las fotos al modelo 3D y al ensamble final. Al terminar verás cómo se verá tu prótesis.",
+    "Journey.simulacion": "Prototipo: el procesamiento muestra resultados reales de un caso de ejemplo.",
+    "Journey.bienvenida": "Cuenta creada. Te damos la bienvenida a KINEVA: empieza subiendo el video de tu extremidad.",
+    "Journey.pasos": "Etapas de tu prótesis",
+    "Journey.paso_escaneo": "Tu escaneo",
+    "Journey.paso_vista": "Tu prótesis",
+    "Journey.paso_pedido": "Pedido",
+    "Journey.paso_seguimiento": "Seguimiento",
+    "Journey.ver_mi_protesis": "Ver mi prótesis",
+    "Journey.volver_al_proceso": "Volver al proceso",
+    "Order.ir_a_mi_seguimiento": "Ir a mi seguimiento",
+    "Order.primer_registro": "Crear mi primer registro"
   },
   "meta": {
     "status": "source",
     "reviewers": [],
     "reviewedAt": null,
-    "sourceRevision": "sha256:c75e9d5deaab08ace6fc0e7b046c2ef5c846b5b87f48973db36fe62d3617cdbe",
+    "sourceRevision": "sha256:a7225cb12a21dca0801c5fb1d4d8dc2f055437252bdd814a72bac167fbb2033a",
     "languageTag": "es-MX"
   }
 }

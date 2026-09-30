@@ -967,3 +967,23 @@
   display: block;
   margin-bottom: 24px;
 }
+
+/* recorrido del paciente dentro de la app */
+.journey-page > .notice {
+  margin-bottom: 20px;
+}
+.journey-stepper {
+  max-width: none;
+  margin-bottom: 26px;
+}
+.journey-title {
+  display: block;
+  margin-bottom: 8px;
+}
+.journey-title small {
+  display: block;
+  margin-top: 8px;
+}
+.journey-page .preview-case {
+  top: 24px;
+}
