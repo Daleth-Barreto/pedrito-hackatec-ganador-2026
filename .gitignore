@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+node_modules/
+dist/
+/backend/storage/
+*.db
+playwright-report/
+test-results/
+*.tsbuildinfo
+/work/
+/backend/model_artifacts/runtime/
+Ultralytics/

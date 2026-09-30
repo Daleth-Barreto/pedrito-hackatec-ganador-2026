@@ -1,0 +1,25 @@
+:root {
+  --font:
+    Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --accent: #16c1c8;
+  --secondary: #0b8f96;
+  --primary: #126e78;
+  --ink: #263238;
+  --surface: #ffffff;
+  --background: #f3fafa;
+  --surface-soft: #e8f8f9;
+  --surface-subtle: #f5fbfb;
+  --muted: #52666c;
+  --border: #cce4e6;
+  --control-border: #6b8b90;
+  --focus: #126e78;
+  --normal: #126e78;
+  --normal-surface: #e8f8f9;
+  --watch: #8a5a12;
+  --watch-surface: #fff3da;
+  --alert: #b83f45;
+  --alert-surface: #fff0f0;
+  --alert-border: #edc6c9;
+  --contour-fill: rgb(22 193 200 / 18%);
+  --radius: 12px;
+}

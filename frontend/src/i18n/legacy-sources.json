@@ -1,0 +1,7 @@
+{
+  "Prototipo de seguimiento. No es un dispositivo diagnóstico.": "server.main.prototipo_de_seguimiento_no_es_un_dispositivo_diagn_sti",
+  "No existe un modelo validado para heridas postamputación en este prototipo.": "server.inference.no_existe_un_modelo_validado_para_heridas_postamputaci_",
+  "Reglas de priorización de prototipo sin validación clínica.": "server.reports.reglas_de_priorizaci_n_de_prototipo_sin_validaci_n_cl_n",
+  "Análisis visual no disponible; la fotografía necesita revisión humana.": "server.triage.an_lisis_visual_no_disponible_la_fotograf_a_necesita_re",
+  "El análisis automatizado de fotografías no está disponible. La imagen requiere revisión del personal de salud.": "server.inference.no_existe_un_modelo_validado_para_heridas_postamputaci_"
+}

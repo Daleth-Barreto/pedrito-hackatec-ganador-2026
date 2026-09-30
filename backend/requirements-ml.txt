@@ -1,0 +1,4 @@
+# Optional local CPU segmentation. Install torch/torchvision from their CPU index first.
+torch==2.14.0
+torchvision==0.29.0
+ultralytics==8.4.166

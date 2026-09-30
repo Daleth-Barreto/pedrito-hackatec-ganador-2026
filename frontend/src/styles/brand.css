@@ -1,0 +1,67 @@
+.kineva-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  color: var(--ink);
+  line-height: 1;
+  text-align: left;
+}
+.kineva-symbol {
+  display: block;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 46px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+.kineva-wordmark {
+  min-width: 0;
+}
+.kineva-name {
+  display: block;
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: 0.025em;
+}
+.kineva-caption {
+  display: block;
+  margin-top: 6px;
+  max-width: 19ch;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 550;
+  line-height: 1.4;
+  letter-spacing: 0.025em;
+}
+.kineva-brand.prominent .kineva-symbol {
+  flex-basis: 68px;
+  width: 68px;
+  height: 71px;
+}
+.kineva-brand.prominent .kineva-name {
+  font-size: 34px;
+}
+.kineva-brand.prominent .kineva-caption {
+  font-size: 12px;
+  max-width: 30ch;
+}
+.public-brand {
+  display: flex;
+  width: fit-content;
+  text-decoration: none !important;
+  margin-bottom: 28px;
+}
+.brand {
+  text-decoration: none;
+}
+@media (max-width: 640px) {
+  .kineva-brand.prominent .kineva-name {
+    font-size: 28px;
+  }
+  .kineva-brand.prominent .kineva-symbol {
+    width: 52px;
+    height: 54px;
+    flex-basis: 52px;
+  }
+}
