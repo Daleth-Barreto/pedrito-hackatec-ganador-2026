@@ -1,4 +1,4 @@
-import { t, useLocale } from "../../i18n/runtime";
+ import { t, useLocale } from "../../i18n/runtime";
 import { useEffect, useState } from "react";
 import { Filter, UsersRound } from "lucide-react";
 import { EmptyState, Loading, Notice, PageTitle } from "../../components/UI";

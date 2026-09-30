@@ -10,7 +10,7 @@ import {
   Hand,
   HeartHandshake,
   PiggyBank,
-  Stethoscope,
+  Stethoscope, 
   Truck,
   UserRound,
   Video,
