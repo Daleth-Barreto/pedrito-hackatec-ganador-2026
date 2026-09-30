@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "npm run i18n:check && tsc -b && vite build",
-    "preview": "vite preview --host 0.0.0.0",
+    "preview": "vite preview --host 127.0.0.1",
     "test:e2e": "playwright test",
     "i18n:check": "node scripts/check-i18n.mjs",
     "test:i18n": "node --test scripts/i18n.test.mjs"
